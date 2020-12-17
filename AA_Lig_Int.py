@@ -55,7 +55,7 @@ def get_hetero_names(structure):
                     hetero_names.append(residue.get_resname())
     return hetero_names
 
-def get_AA_names(structure):
+def get_AA_names_nums(structure):
     """
     Parameters
     ----------
@@ -66,13 +66,15 @@ def get_AA_names(structure):
     AA_names : a list of amino acid names in a protein model.
     """
     AA_names = []
+    AA_nums = []
     for model in structure:
         for chain in model:
             for residue in chain.get_list():
                 if is_nonAA(residue):
                     continue
                 AA_names.append(residue.get_resname())
-    return AA_names
+                AA_nums.append(residue.get_id()[1])
+    return AA_names, AA_nums
                 
 def is_nonAA(residue):
     """
@@ -135,7 +137,7 @@ def check_distance_CA(AA, H):
         distance.append(AA['CA']-atom)
     return min(distance)
 
-def check_distance_all(AA, H):
+def check_distance_residue(AA, H):
     """
     Parameters
     ----------
@@ -153,8 +155,23 @@ def check_distance_all(AA, H):
             distance.append(atom_AA-atom_H)
     return min(distance)
 
+def check_distance_protein(structure, H):
+    distances = []
+    for model in structure:
+        for chain in model:
+            for residue in chain.get_list():
+                # TODO
+                # Add different modes CA or all
+                distances.append(check_distance_residue(residue, H))
+    return distances
+
+# def check_all_ligands(structure):
+#     heteros = get_heteros()
+#     for H in heteros:
+        
+
 let_me_try = get_heteros(structure)
-AA_names = get_AA_names(structure)
+AA_names, AA_nums = get_AA_names_nums(structure)
 hetero_names = get_hetero_names(structure)
 
 # output_test = open('output_test.txt', 'w')
