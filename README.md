@@ -5,6 +5,8 @@ Note: still in development...
 Python script for checking the interactions between amino acids and ligands (or amino acids and water molecules).
 More specifically, it checks the distance between each amino acid in a protein model and each ligand (or each water molecule).
 
+Planned usage:
+
 Planned Functionality:
 
 Outputs a csv file with all amino acids and additional information on their interactions.
@@ -14,8 +16,6 @@ Different versions of output:
 - can output either the exact distance between amino accids and ligands/water or True and False values (1 or 0) based on the given distance threshold
 - it can combine all ligands into one column, reporting the smallest distance (or a single True/False value)...
 - ... or it can report mulitple columns for each ligand
-
-Planned usage:
 
 
 Planned Options / Parameters:
@@ -42,14 +42,21 @@ water
 Notes:
 
 General computation
+
 Computation time CA vs all
+
 Water yes - only condensed mode since some protein models have a lot of water molecules
 
 Requirements:
 
 The script uses biopython:
+
 link
+
 Install it with:
+
 pip install biopython
+
 or
+
 conda install biopython
