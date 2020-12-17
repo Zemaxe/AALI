@@ -169,16 +169,25 @@ def check_distance_protein(structure, H):
 def check_all_H(structure):
     heteros = get_heteros(structure)
     hetero_names = get_hetero_names(structure)
-    # AA_names, AA_nums = get_AA_names_nums()
     all_ligands = pd.DataFrame()
     for i in range(len(heteros)):
         all_ligands[hetero_names[i]] = check_distance_protein(structure, heteros[i])
     return all_ligands
 
+def combine(structure):
+    AA_names, AA_nums = get_AA_names_nums(structure)
+    result = pd.DataFrame()
+    result['AA_name'] = AA_names
+    result['AA_num'] = AA_nums
+    H_distances = check_all_H(structure)
+    return pd.concat([result,H_distances], axis=1)
+
 let_me_try = get_heteros(structure)
 AA_names, AA_nums = get_AA_names_nums(structure)
 hetero_names = get_hetero_names(structure)
-check_all = check_all_H(structure)
+heteros = get_heteros(structure)
+H_distances = check_all_H(structure)
+check_all = combine(structure)
 
 # output_test = open('output_test.txt', 'w')
                 
