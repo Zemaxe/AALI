@@ -222,6 +222,7 @@ def combine(structure):
     # add if else for check_all_W
     return pd.concat([result,H_distances], axis=1)
 
+# Some checks...
 let_me_try = get_heteros(structure)
 AA_names, AA_nums = get_AA_names_nums(structure)
 hetero_names = get_hetero_names(structure)
@@ -233,6 +234,7 @@ check_all = combine(structure)
 Checked against these two servers:
     https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4909059/
     https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3039989/
+And currently, AA_Lig_Int gives the same results as these above...
 """
 
 # output_test = open('output_test.txt', 'w')
