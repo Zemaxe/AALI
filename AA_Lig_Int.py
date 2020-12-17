@@ -27,7 +27,7 @@ def get_heteros(structure):
     heteros : a list of hetero residues in a protein model.
     """
     heteros = []
-    
+
     for model in structure:
         for chain in model:
             for residue in chain.get_list():
@@ -71,8 +71,7 @@ def get_AA_names(structure):
             for residue in chain.get_list():
                 if is_nonAA(residue):
                     continue
-                else:
-                    AA_names.append(residue.get_resname())
+                AA_names.append(residue.get_resname())
     return AA_names
                 
 def is_nonAA(residue):
@@ -99,11 +98,26 @@ def is_hetero(residue):
     Returns
     -------
     Boolean
-        True if residue is hetero or water, False otherwise.
+        True if residue is hetero, False otherwise.
     """
     residue_id = residue.get_id()
     hetfield = residue_id[0]
-    return (hetfield[0] == 'H')
+    return hetfield[0] == 'H'
+
+def is_water(residue):
+    """
+    Parameters
+    ----------
+    residue : a residue from a protein structure object made with PDBParser().
+
+    Returns
+    -------
+    Boolean
+        True if residue is water, False otherwise.
+    """
+    residue_id = residue.get_id()
+    hetfield = residue_id[0]
+    return hetfield[0] == 'W'
 
 def check_distance_CA(AA, H):
     """
