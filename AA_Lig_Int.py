@@ -64,7 +64,7 @@ def get_AA_names_nums(structure):
     Returns
     -------
     AA_names : a list of amino acid names in a protein model.
-    AA_nums : a list of animo acid number IDs in a protien model.
+    AA_nums : a list of animo acid number IDs in a protein model.
     """
     AA_names = []
     AA_nums = []
@@ -157,6 +157,17 @@ def check_distance_residue(AA, H):
     return min(distance)
 
 def check_distance_protein(structure, H):
+    """
+    Parameters
+    ----------
+    structure : Biopython protein structure object made with PDBParser().
+    H  : hetero residue from a protein structure object made with PDBParser().
+
+    Returns
+    -------
+    distances : the list of smallest distances between each amino acid from 
+    protein structure and a given ligand H.
+    """  
     distances = []
     for model in structure:
         for chain in model:
@@ -169,6 +180,16 @@ def check_distance_protein(structure, H):
     return distances
 
 def check_all_H(structure):
+    """
+    Parameters
+    ----------
+    structure : Biopython protein structure object made with PDBParser().
+
+    Returns
+    -------
+    all_ligands : dataframe of all distances between each amino acid residue 
+    and ligand from the protein structure.
+    """  
     heteros = get_heteros(structure)
     hetero_names = get_hetero_names(structure)
     all_ligands = pd.DataFrame()
@@ -176,12 +197,29 @@ def check_all_H(structure):
         all_ligands[hetero_names[i]] = check_distance_protein(structure, heteros[i])
     return all_ligands
 
+def check_all_W(structure):
+    # TODO
+    return
+
 def combine(structure):
+    """
+    Parameters
+    ----------
+    structure : Biopython protein structure object made with PDBParser().
+
+    Returns
+    -------
+    dataframe : containing every amino acid name and ID number, toegether with
+    all distances between each amino acid residue and ligand from the protein 
+    structure.
+    """  
     AA_names, AA_nums = get_AA_names_nums(structure)
     result = pd.DataFrame()
     result['AA_name'] = AA_names
     result['AA_num'] = AA_nums
     H_distances = check_all_H(structure)
+    # TODO
+    # add if else for check_all_W
     return pd.concat([result,H_distances], axis=1)
 
 let_me_try = get_heteros(structure)
@@ -190,6 +228,12 @@ hetero_names = get_hetero_names(structure)
 heteros = get_heteros(structure)
 H_distances = check_all_H(structure)
 check_all = combine(structure)
+
+"""
+Checked against these two servers:
+    https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4909059/
+    https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3039989/
+"""
 
 # output_test = open('output_test.txt', 'w')
                 
