@@ -64,6 +64,7 @@ def get_AA_names_nums(structure):
     Returns
     -------
     AA_names : a list of amino acid names in a protein model.
+    AA_nums : a list of animo acid number IDs in a protien model.
     """
     AA_names = []
     AA_nums = []
@@ -161,18 +162,23 @@ def check_distance_protein(structure, H):
         for chain in model:
             for residue in chain.get_list():
                 # TODO
-                # Add different modes CA or all
+                # Add different modes CA or residue
                 distances.append(check_distance_residue(residue, H))
     return distances
 
-# def check_all_ligands(structure):
-#     heteros = get_heteros()
-#     for H in heteros:
-        
+def check_all_H(structure):
+    heteros = get_heteros(structure)
+    hetero_names = get_hetero_names(structure)
+    # AA_names, AA_nums = get_AA_names_nums()
+    all_ligands = pd.DataFrame()
+    for i in range(len(heteros)):
+        all_ligands[hetero_names[i]] = check_distance_protein(structure, heteros[i])
+    return all_ligands
 
 let_me_try = get_heteros(structure)
 AA_names, AA_nums = get_AA_names_nums(structure)
 hetero_names = get_hetero_names(structure)
+check_all = check_all_H(structure)
 
 # output_test = open('output_test.txt', 'w')
                 
