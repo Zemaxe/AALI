@@ -32,7 +32,7 @@ threshold
   - a (list of) number(s) (applicable in the case of output = tf - what will be a threshold value for which 1 will be generated, indicating a contact between amino acid and a ligand)
   
 mode
-  - all (checks all atoms from a given amino acid against all atoms from a given ligand and reports back the smallest one)
+  - residue (checks all atoms from a given amino acid against all atoms from a given ligand and reports back the smallest one)
   - CA (checks only the distance between C alpha from amino acid against all atoms from a given ligand and reports back the smallest one)
   
 water
