@@ -161,6 +161,8 @@ def check_distance_protein(structure, H):
     for model in structure:
         for chain in model:
             for residue in chain.get_list():
+                if is_nonAA(residue):
+                    continue
                 # TODO
                 # Add different modes CA or residue
                 distances.append(check_distance_residue(residue, H))
