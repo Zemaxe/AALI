@@ -22,8 +22,7 @@ Planned Options / Parameters:
 
 output
   - exact (reports an exact distance)
-  - tf_all (reports 1/0 values for all ligands; 1 if they are within the threshold distance, 0 otherwise)
-  - tf (reports combined 1/0 values; 1 if at least one ligand is within the threshold distance, 0 otherwise)
+  - tf (reports combined 1/0 values; 1 if the ligand is within the threshold distance, 0 otherwise)
   
 combined
   - yes (reports the smallest distance from all ligands in a single column)
