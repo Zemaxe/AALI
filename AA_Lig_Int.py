@@ -16,8 +16,13 @@ parser = PDBParser()
 
 structure = parser.get_structure(ID, protein)
 
-threshold = 4
+threshold = int('4')
+
+# output = 'exact'
 output = 'tf'
+
+# combined = 'yes'
+combined = 'no'
 
 def get_heteros(structure):
     """
@@ -191,17 +196,25 @@ def check_all_H(structure):
     Returns
     -------
     all_ligands : dataframe of all distances between each amino acid residue 
-    and ligand from the protein structure.
+    and ligand from the protein structure, or 
     """  
     heteros = get_heteros(structure)
     hetero_names = get_hetero_names(structure)
     all_ligands = pd.DataFrame()
-    for i in range(len(heteros)):
-        all_ligands[hetero_names[i]] = check_distance_protein(structure, heteros[i])
-    if output == 'tf':
+    if output == 'exact':
+        for i in range(len(heteros)):
+            all_ligands[hetero_names[i]] = check_distance_protein(structure, heteros[i])
+        if combined == 'yes':
+            all_ligands = all_ligands.min(axis=1)
+            all_ligands.name = 'distance'
+    elif output == 'tf':
+        for i in range(len(heteros)):
+            column_id = hetero_names[i]+'_'+str(threshold)
+            all_ligands[column_id] = check_distance_protein(structure, heteros[i])
         all_ligands = all_ligands < threshold
-        all_ligands = all_ligands.any(axis=1)
-        all_ligands.name = str(threshold)
+        if combined == 'yes':
+            all_ligands = all_ligands.any(axis=1)
+            all_ligands.name = str(threshold)
     return all_ligands
 
 def check_all_W(structure):
