@@ -16,6 +16,9 @@ parser = PDBParser()
 
 structure = parser.get_structure(ID, protein)
 
+threshold = 4
+output = 'tf'
+
 def get_heteros(structure):
     """
     Parameters
@@ -195,6 +198,10 @@ def check_all_H(structure):
     all_ligands = pd.DataFrame()
     for i in range(len(heteros)):
         all_ligands[hetero_names[i]] = check_distance_protein(structure, heteros[i])
+    if output == 'tf':
+        all_ligands = all_ligands < threshold
+        all_ligands = all_ligands.any(axis=1)
+        all_ligands.name = str(threshold)
     return all_ligands
 
 def check_all_W(structure):
