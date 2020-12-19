@@ -237,7 +237,7 @@ def check_all_H(structure):
     Returns
     -------
     all_ligands : dataframe of all distances between each amino acid residue 
-    and ligand from the protein structure, or 
+    and ligand from the protein structure.
     """  
     heteros = get_heteros(structure)
     # handling a case with no ligands present
@@ -253,7 +253,7 @@ def check_all_H(structure):
             all_ligands[hetero_names[i]] = check_distance_protein(structure, heteros[i])
         if combined == 'yes':
             all_ligands = all_ligands.min(axis=1)
-            all_ligands.name = 'distance'
+            all_ligands.name = 'ligand_distance'
     # handling a case if output = 'tf'
     elif output == 'tf':
         for i in range(len(heteros)):
@@ -262,12 +262,41 @@ def check_all_H(structure):
         all_ligands = all_ligands < threshold
         if combined == 'yes':
             all_ligands = all_ligands.any(axis=1)
-            all_ligands.name = str(threshold)
+            all_ligands.name = 'ligand_'+str(threshold)
     return all_ligands
 
 def check_all_W(structure):
-    # TODO
-    return
+    """
+    Parameters
+    ----------
+    structure : Biopython protein structure object made with PDBParser().
+
+    Returns
+    -------
+    all_water : dataframe of all distances between each amino acid residue 
+    and water molecules from the protein structure.
+    """  
+    water = get_water(structure)
+    # handling a case with no water present
+    if len(water) == 0:
+        print(ID, ': no water molecules present.')
+        if skip == 'yes':
+            return
+    all_water = pd.DataFrame()
+    # handling a case if output = 'exact'
+    if output == 'exact':
+        for i in range(len(water)):
+            all_water[str(i)] = check_distance_protein(structure, water[i])
+        all_water = all_water.min(axis=1)
+        all_water.name = 'water_distance'
+    # handling a case if output = 'tf'
+    elif output == 'tf':
+        for i in range(len(water)):
+            all_water[str(i)] = check_distance_protein(structure, water[i])
+        all_water = all_water < threshold_w
+        all_water = all_water.any(axis=1)
+        all_water.name = 'water_'+str(threshold_w)
+    return all_water
 
 def combine(structure):
     """
@@ -306,6 +335,7 @@ hetero_names = get_hetero_names(structure)
 heteros = get_heteros(structure)
 H_distances = check_all_H(structure)
 check_all = combine(structure)
+check_water = check_all_W(structure)
 
 """
 Checked against these two servers:
