@@ -8,11 +8,11 @@ Created on Mon Sep 28 09:38:30 2020
 from Bio.PDB.PDBParser import PDBParser
 import pandas as pd
 
-# protein = './Test/4U9S.pdb'
-# ID = '4U9S'
+protein = './Test/4U9S.pdb'
+ID = '4U9S'
 
-protein = './Test/1KJU.pdb'
-ID = '1KJU'
+# protein = './Test/1KJU.pdb'
+# ID = '1KJU'
 
 parser = PDBParser()
 
@@ -20,14 +20,25 @@ structure = parser.get_structure(ID, protein)
 
 threshold = int('4')
 
-# output = 'exact'
-output = 'tf'
+threshold_w = int('4')
+
+mode = 'residue'
+# mode = 'CA'
+
+output = 'exact'
+# output = 'tf'
 
 # combined = 'yes'
 combined = 'no'
 
 skip = 'yes'
 # skip = 'no'
+
+# TODO
+# add support for check_water
+
+# TODO
+# add support for check_ligand
 
 # TODO
 # Add a parameter to join output of multiple proteins into a single dataframe/csv file
@@ -211,9 +222,10 @@ def check_distance_protein(structure, H):
             for residue in chain.get_list():
                 if is_nonAA(residue):
                     continue
-                # TODO
-                # Add different modes CA or residue
-                distances.append(check_distance_residue(residue, H))
+                if mode == 'residue':
+                    distances.append(check_distance_residue(residue, H))
+                elif mode == 'CA':
+                    distances.append(check_distance_CA(residue, H))                
     return distances
 
 def check_all_H(structure):
@@ -233,15 +245,16 @@ def check_all_H(structure):
         print(ID, ': no ligands present.')
         if skip == 'yes':
             return
-
     hetero_names = get_hetero_names(structure)
     all_ligands = pd.DataFrame()
+    # handling a case if output = 'exact'
     if output == 'exact':
         for i in range(len(heteros)):
             all_ligands[hetero_names[i]] = check_distance_protein(structure, heteros[i])
         if combined == 'yes':
             all_ligands = all_ligands.min(axis=1)
             all_ligands.name = 'distance'
+    # handling a case if output = 'tf'
     elif output == 'tf':
         for i in range(len(heteros)):
             column_id = hetero_names[i]+'_'+str(threshold)
@@ -267,11 +280,16 @@ def combine(structure):
     dataframe : containing every amino acid name and ID number, toegether with
     all distances between each amino acid residue and ligand from the protein 
     structure.
-    """  
+    """
+    # TODO
+    # Add support for skip entire protein if both no ligand and no water molecules are present
+    # and skip == yes
+
     AA_names, AA_nums = get_AA_names_nums(structure)
     result = pd.DataFrame()
     result['AA_name'] = AA_names
     result['AA_num'] = AA_nums
+    # TODO add skip if only water is needed
     H_distances = check_all_H(structure)
     # TODO
     # add if else for check_all_W
