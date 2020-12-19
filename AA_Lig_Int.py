@@ -24,6 +24,12 @@ output = 'tf'
 # combined = 'yes'
 combined = 'no'
 
+# TODO
+# Add parameter skip if no H or W present
+
+# TODO
+# Add a parameter to join output of multiple proteins into a single dataframe/csv file
+
 def get_heteros(structure):
     """
     Parameters
@@ -199,6 +205,9 @@ def check_all_H(structure):
     and ligand from the protein structure, or 
     """  
     heteros = get_heteros(structure)
+    # TODO
+    # check if no heteros present
+    #
     hetero_names = get_hetero_names(structure)
     all_ligands = pd.DataFrame()
     if output == 'exact':
