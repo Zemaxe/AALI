@@ -285,6 +285,10 @@ def combine(structure):
     # Add support for skip entire protein if both no ligand and no water molecules are present
     # and skip == yes
 
+    # TODO
+    # Add support to generate an empty column if no ligand/water is present
+    # and skip == no
+    
     AA_names, AA_nums = get_AA_names_nums(structure)
     result = pd.DataFrame()
     result['AA_name'] = AA_names
