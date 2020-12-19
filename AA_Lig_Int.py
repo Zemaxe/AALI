@@ -8,9 +8,11 @@ Created on Mon Sep 28 09:38:30 2020
 from Bio.PDB.PDBParser import PDBParser
 import pandas as pd
 
-protein = './Test/4U9S.pdb'
+# protein = './Test/4U9S.pdb'
+# ID = '4U9S'
 
-ID = '4U9S'
+protein = './Test/1KJU.pdb'
+ID = '1KJU'
 
 parser = PDBParser()
 
@@ -24,8 +26,8 @@ output = 'tf'
 # combined = 'yes'
 combined = 'no'
 
-# TODO
-# Add parameter skip if no H or W present
+skip = 'yes'
+# skip = 'no'
 
 # TODO
 # Add a parameter to join output of multiple proteins into a single dataframe/csv file
@@ -205,9 +207,12 @@ def check_all_H(structure):
     and ligand from the protein structure, or 
     """  
     heteros = get_heteros(structure)
-    # TODO
-    # check if no heteros present
-    #
+    # handling a case with no ligands present
+    if len(heteros) == 0:
+        print(ID, ': no ligands present.')
+        if skip == 'yes':
+            return
+
     hetero_names = get_hetero_names(structure)
     all_ligands = pd.DataFrame()
     if output == 'exact':
