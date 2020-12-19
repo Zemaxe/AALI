@@ -32,6 +32,10 @@ skip = 'yes'
 # TODO
 # Add a parameter to join output of multiple proteins into a single dataframe/csv file
 
+# TODO
+# Implement handling multiple chains
+# E.g. if multiple chains add chain column in the output
+
 def get_heteros(structure):
     """
     Parameters
@@ -47,11 +51,28 @@ def get_heteros(structure):
     for model in structure:
         for chain in model:
             for residue in chain.get_list():
-                residue_id = residue.get_id()
-                hetfield = residue_id[0]
-                if hetfield[0] == 'H':
+                if is_hetero(residue):
                     heteros.append(residue)
     return heteros
+
+def get_water(structure):
+    """
+    Parameters
+    ----------
+    structure : Biopython protein structure object made with PDBParser().
+
+    Returns
+    -------
+    water : a list of water molecules in a protein model.
+    """
+    water = []
+
+    for model in structure:
+        for chain in model:
+            for residue in chain.get_list():
+                if is_water(residue):
+                    water.append(residue)
+    return water
 
 def get_hetero_names(structure):
     """
