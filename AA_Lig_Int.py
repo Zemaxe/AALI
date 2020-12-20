@@ -322,6 +322,7 @@ def combine(structure):
     result = pd.DataFrame()
     result['AA_name'] = AA_names
     result['AA_num'] = AA_nums
+    # handle different types of checks...
     if check_ligand == 'yes' and check_water == 'yes':
         H_distances = check_all_H(structure)
         W_distances = check_all_W(structure)
@@ -334,6 +335,7 @@ def combine(structure):
         return pd.concat([result,W_distances], axis=1)
     else:
         print('Please use "yes" for at least one of the two: chek_water or check_ligand.')
+        return
     
 # Some checks...
 let_me_try = get_heteros(structure)
