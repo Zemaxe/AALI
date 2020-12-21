@@ -1,4 +1,6 @@
-# AA_Lig_Int
+# AALI
+
+Amino Acid Ligand Interactions
 
 Note: still in development...
 
