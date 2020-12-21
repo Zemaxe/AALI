@@ -41,6 +41,13 @@ join = 'no'
 # Implement handling multiple chains
 # E.g. if multiple chains add chain column in the output
 
+# TODO
+# Implement support for verbose
+# Printing out the percentage of work done
+
+# TODO
+# Implement adding a column with protein name in case of join == 'yes'
+
 def get_heteros(structure):
     """
     Parameters
@@ -340,6 +347,9 @@ for file in os.listdir(in_folder):
     if file.endswith('.pdb'):
         proteins.append(file)
 
+if join == 'yes':
+    result_joined = pd.DataFrame()
+
 for protein in proteins:
     ID = protein.replace('.pdb', '')
     parser = PDBParser()
@@ -347,18 +357,25 @@ for protein in proteins:
     structure = parser.get_structure(ID, protein_path)
     
     result = combine(structure)
-    result.to_csv(out_folder)
-    
+    if join == 'no':
+        result_path = out_folder+'/'+ID+'.csv'
+        result.to_csv(result_path)
+    elif join == 'yes':
+        result_joined = pd.concat([result_joined,result])
 
-# Some checks...
-let_me_try = get_heteros(structure)
-AA_names, AA_nums = get_AA_names_nums(structure)
-hetero_names = get_hetero_names(structure)
-heteros = get_heteros(structure)
-water = get_water(structure)
-H_distances = check_all_H(structure)
-check_all = combine(structure)
-check_water = check_all_W(structure)
+if join == 'yes':
+    result_joined_path = out_folder+'/'+'AALI_contacts.csv'
+    result_joined.to_csv(result_joined_path)
+
+# # Some checks...
+# let_me_try = get_heteros(structure)
+# AA_names, AA_nums = get_AA_names_nums(structure)
+# hetero_names = get_hetero_names(structure)
+# heteros = get_heteros(structure)
+# water = get_water(structure)
+# H_distances = check_all_H(structure)
+# check_all = combine(structure)
+# check_water = check_all_W(structure)
 
 
 
