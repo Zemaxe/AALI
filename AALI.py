@@ -9,16 +9,6 @@ from Bio.PDB.PDBParser import PDBParser
 import pandas as pd
 import os
 
-protein = './PDBs/T2.pdb'
-ID = 'T2'
-
-# protein = './PDBs/T1.pdb'
-# ID = 'T1'
-
-parser = PDBParser()
-
-structure = parser.get_structure(ID, protein)
-
 threshold = int('4')
 
 threshold_w = int('4')
@@ -41,10 +31,11 @@ check_water = 'yes'
 check_ligand = 'yes'
 # check_ligand = 'no'
 
-output = 'output'
+in_folder = 'PDBs'
+out_folder = 'output'
 
-# TODO
-# Add a parameter to join output of multiple proteins into a single dataframe/csv file
+join = 'no'
+# join = 'yes'
 
 # TODO
 # Implement handling multiple chains
@@ -340,9 +331,24 @@ def combine(structure):
         print('Please use "yes" for at least one of the two: chek_water or check_ligand.')
         return
     
-if not os.path.exists(output):
-    os.mkdir(output)
+if not os.path.exists(out_folder):
+    os.mkdir(out_folder)
 
+proteins = []
+
+for file in os.listdir(in_folder):
+    if file.endswith('.pdb'):
+        proteins.append(file)
+
+for protein in proteins:
+    ID = protein.replace('.pdb', '')
+    parser = PDBParser()
+    protein_path = in_folder+'/'+protein
+    structure = parser.get_structure(ID, protein_path)
+    
+    result = combine(structure)
+    result.to_csv(out_folder)
+    
 
 # Some checks...
 let_me_try = get_heteros(structure)
