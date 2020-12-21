@@ -8,11 +8,11 @@ Created on Mon Sep 28 09:38:30 2020
 from Bio.PDB.PDBParser import PDBParser
 import pandas as pd
 
-protein = './Test/4U9S.pdb'
-ID = '4U9S'
+protein = './PDBs/T2.pdb'
+ID = 'T2'
 
-# protein = './Test/1KJU.pdb'
-# ID = '1KJU'
+# protein = './PDBs/T1.pdb'
+# ID = 'T1'
 
 parser = PDBParser()
 
