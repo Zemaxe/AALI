@@ -2,24 +2,25 @@
 
 Amino Acid Ligand Interactions
 
-Note: still in development...
+Note: still in development but the script is usable at this point...
 
 Python script for checking the interactions between amino acids and ligands (or amino acids and water molecules).
 More specifically, it checks the distance between each amino acid in a protein model and each ligand (or each water molecule).
 
 Planned usage:
 
-The script will read PDB files from the input directory, and save the results into the "distances" directory.
+The script will read PDB files from the input directory (default "PDBs"), and save the results into the output directory (default "output").
 
 Planned Functionality:
 
-Outputs a csv file with all amino acids and additional information on their interactions.
+Outputs a csv file (one or multiple) with all amino acids and additional information on their distances from (or interactions with) ligand(s) and/or water molecules.
 
 Different versions of output:
 
-- can output either the exact distance between amino accids and ligands/water or True and False values (1 or 0) based on the given distance threshold
+- can output either the exact distance between amino acids and ligands/water or True and False values based on the given distance threshold
 - it can combine all ligands into one column, reporting the smallest distance (or a single True/False value)...
 - ... or it can report mulitple columns for each ligand
+- in case of multiple pdb files, it can output one csv file per pdb file, or it can combine the all of the output into a single pdb file
 
 
 Planned Options / Parameters:
@@ -61,9 +62,10 @@ join (default: no)
 
 Notes:
 
-General computation
+General computation time (TBD)
+Testing on multiple pdb files (TBD)
 
-Computation time CA vs all
+Computation time CA vs all, vs with water
 
 Water yes - only condensed mode since some protein models have a lot of water molecules
 
@@ -71,7 +73,7 @@ Requirements:
 
 The script uses biopython:
 
-link
+https://biopython.org/
 
 Install it with:
 
