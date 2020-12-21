@@ -7,6 +7,7 @@ Created on Mon Sep 28 09:38:30 2020
 
 from Bio.PDB.PDBParser import PDBParser
 import pandas as pd
+import os
 
 protein = './PDBs/T2.pdb'
 ID = 'T2'
@@ -39,6 +40,8 @@ check_water = 'yes'
 
 check_ligand = 'yes'
 # check_ligand = 'no'
+
+output = 'output'
 
 # TODO
 # Add a parameter to join output of multiple proteins into a single dataframe/csv file
@@ -337,6 +340,10 @@ def combine(structure):
         print('Please use "yes" for at least one of the two: chek_water or check_ligand.')
         return
     
+if not os.path.exists(output):
+    os.mkdir(output)
+
+
 # Some checks...
 let_me_try = get_heteros(structure)
 AA_names, AA_nums = get_AA_names_nums(structure)
@@ -346,6 +353,8 @@ water = get_water(structure)
 H_distances = check_all_H(structure)
 check_all = combine(structure)
 check_water = check_all_W(structure)
+
+
 
 """
 Checked against these two servers:
