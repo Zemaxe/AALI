@@ -19,7 +19,7 @@ def parse_args():
     parser.add_argument("-out", "--out_folder", default="output",
                         help = "set the folder which will contain the results")
     parser.add_argument("-c", "--combined", choices=["yes", "no"], default="no",
-                        help = "choose whether to show all distances or smallest ones")    
+                        help = "choose whether to show all distances or the smallest ones")    
     args = parser.parse_args()
     return args
 
