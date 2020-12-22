@@ -289,7 +289,7 @@ def check_all_W(structure):
         all_water.name = 'water_'+str(threshold_w)
     return all_water
 
-def combine(structure, ID):
+def combine(structure):
     """
     Parameters
     ----------
@@ -351,7 +351,7 @@ def main():
         protein_path = in_folder+'/'+protein
         structure = parser.get_structure(ID, protein_path)
         
-        result = combine(structure, ID)
+        result = combine(structure)
         if result is None:
             print('No ligands and/or water present in ', ID)
             continue
