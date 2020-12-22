@@ -4,8 +4,8 @@ Amino Acid Ligand Interactions
 
 Note: still in development but the script is usable at this point...
 
-Python script for checking the interactions between amino acids and ligands (or amino acids and water molecules).
-More specifically, it checks the distance between each amino acid in a protein model and each ligand (or each water molecule).
+Python script for checking the interactions between amino acids and ligands (and/or amino acids and water molecules).
+More specifically, it checks the distance between each amino acid in a protein model and each ligand (and/or each water molecule).
 
 ## Usage:
 
@@ -26,27 +26,27 @@ Different versions of output:
 - can output either the exact distance between amino acids and ligands/water or True and False values based on the given distance threshold
 - it can combine all ligands into one column, reporting the smallest distance (or a single True/False value)...
 - ... or it can report mulitple columns for each ligand
-- in case of multiple pdb files, it can output one csv file per pdb file, or it can combine the all of the output into a single pdb file
+- in case of multiple pdb files, it can output one csv file per pdb file, or it can combine all of the output into a single pdb file
 
 
 ## Options / Parameters:
 
 output (default: exact)
   - exact (reports an exact distance)
-  - tf (reports combined 1/0 values; 1 if the ligand is within the threshold distance, 0 otherwise)
+  - tf (reports combined True or False values; True if the ligand is within the threshold distance, False otherwise)
   
 combined (default: no)
-  - yes (reports the smallest distance from all ligands in a single column, or, if output=tf, a single 1 if any of the ligands is within the threshold distance, 0 otherwise)
+  - yes (reports the smallest distance from all ligands in a single column, or, if output=tf, a single True if any of the ligands is within the threshold distance, False otherwise)
   - no (reports info on all ligands)
   
 threshold (default: [3.5,7]) """"""""""""""""""""""TBD""""""""""""""""""""""
-  - a (list of) number(s) (applicable in the case of output = tf - what will be a threshold value for which 1 will be generated, indicating a contact between amino acid and a ligand)
+  - a (list of) number(s) (applicable in the case of output = tf - what will be a threshold value for which True will be generated, indicating a contact between amino acid and a ligand)
   
 threshold_w (default: [3.5]
-  - a (list of) number(s) (applicable in the case of output = tf - what will be a threshold value for which 1 will be generated, indicating a contact between amino acid and a water molecule)
+  - a (list of) number(s) (applicable in the case of output = tf - what will be a threshold value for which True will be generated, indicating a contact between amino acid and a water molecule)
   
 mode (default: residue)
-  - residue (checks all atoms from a given amino acid against all atoms from a given ligand and reports back the smallest one)
+  - residue (checks all atoms from a given amino acid against all atoms from a given ligand and reports back the smallest distance)
   - CA (checks only the distance between C alpha from amino acid against all atoms from a given ligand and reports back the smallest one)
 
 check_ligand (default: yes)
@@ -78,7 +78,7 @@ Computation time CA vs all, vs with water
 
 Water yes - only condensed mode since some protein models have a lot of water molecules
 
-Requirements:
+## Requirements:
 
 The script uses biopython:
 
