@@ -65,7 +65,7 @@ join (default: no)
   - no (generate a csv output file for each pdb file)
   - yes (generate a single csv output file for all pdb files)
   
-### Note: expect high RAM usage if working with a lot of pdb files and selecting join='yes' (probably 1GB+ for 5000 pdb files, depends on the files themselves).
+##### Note: expect high RAM usage if working with a lot of pdb files and selecting join='yes' (probably 1GB+ for 5000 pdb files, depends on the files themselves).
 
   
 
