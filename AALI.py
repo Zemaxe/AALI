@@ -16,6 +16,8 @@ def parse_args():
                         help = "set output type: exact distance or true/false")
     parser.add_argument("-in", "--in_folder", default="PDBs",
                         help = "set the folder containing pdb files")
+    parser.add_argument("-t", "--threshold", type=int, default=4,
+                        help = "set the threshold value for generating True/False output")
     parser.add_argument("-out", "--out_folder", default="output",
                         help = "set the folder which will contain the results")
     parser.add_argument("-c", "--combined", choices=["yes", "no"], default="no",
@@ -34,8 +36,6 @@ def parse_args():
                         help = "choose whether to join all output csv files into one")
     args = parser.parse_args()
     return args
-
-threshold = int('4')
 
 threshold_w = int('4')
 
@@ -255,12 +255,12 @@ def check_all_H(structure):
     # handling a case if output = 'tf'
     elif args.output == 'tf':
         for i in range(len(heteros)):
-            column_id = hetero_names[i]+'_'+str(threshold)
+            column_id = hetero_names[i]+'_'+str(args.threshold)
             all_ligands[column_id] = check_distance_protein(structure, heteros[i])
-        all_ligands = all_ligands < threshold
+        all_ligands = all_ligands < args.threshold
         if args.combined == 'yes':
             all_ligands = all_ligands.any(axis=1)
-            all_ligands.name = 'ligand_'+str(threshold)
+            all_ligands.name = 'ligand_'+str(args.threshold)
     return all_ligands
 
 def check_all_W(structure):
@@ -388,7 +388,8 @@ if __name__ == '__main__':
 Checked against these two servers:
     https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4909059/
     https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3039989/
-And currently, AA_Lig_Int gives the same results as these above...
+    http://firedb.bioinfo.cnio.es/Php/Contact.php
+And currently, AALI gives the same results as these above...
 """
 
 # output_test = open('output_test.txt', 'w')
