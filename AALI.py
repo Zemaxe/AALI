@@ -12,8 +12,12 @@ import os
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-o", "--output", choices=["exact", "tf"], 
-                        help="set output type: exact distance or true/false")
+    parser.add_argument("-o", "--output", choices=["exact", "tf"], default="exact",
+                        help = "set output type: exact distance or true/false")
+    parser.add_argument("-in", "--in_folder", default="PDBs",
+                        help = "set the folder containing pdb files")
+    parser.add_argument("-out", "--out_folder", default="output",
+                        help = "set the folder which will contain the results")
     args = parser.parse_args()
     return args
 
@@ -23,9 +27,6 @@ threshold_w = int('4')
 
 mode = 'residue'
 # mode = 'CA'
-
-# output = 'exact'
-# output = 'tf'
 
 # combined = 'yes'
 combined = 'no'
@@ -39,8 +40,8 @@ check_water = 'yes'
 check_ligand = 'yes'
 # check_ligand = 'no'
 
-in_folder = 'PDBs'
-out_folder = 'output'
+# in_folder = 'PDBs'
+# out_folder = 'output'
 
 join = 'no'
 # join = 'yes'
@@ -341,12 +342,12 @@ def combine(structure):
         return
 
 def main(args):
-    if not os.path.exists(out_folder):
-        os.mkdir(out_folder)
+    if not os.path.exists(args.out_folder):
+        os.mkdir(args.out_folder)
     
     proteins = []
     
-    for file in os.listdir(in_folder):
+    for file in os.listdir(args.in_folder):
         if file.endswith('.pdb'):
             proteins.append(file)
     
@@ -356,7 +357,7 @@ def main(args):
     for protein in proteins:
         ID = protein.replace('.pdb', '')
         parser = PDBParser()
-        protein_path = in_folder+'/'+protein
+        protein_path = args.in_folder+'/'+protein
         structure = parser.get_structure(ID, protein_path)
         
         result = combine(structure)
@@ -364,13 +365,13 @@ def main(args):
             print('No ligands and/or water present in ', ID)
             continue
         if join == 'no':
-            result_path = out_folder+'/'+ID+'.csv'
+            result_path = args.out_folder+'/'+ID+'.csv'
             result.to_csv(result_path)
         elif join == 'yes':
             result_joined = pd.concat([result_joined,result])
     
     if join == 'yes':
-        result_joined_path = out_folder+'/'+'AALI_contacts.csv'
+        result_joined_path = args.out_folder+'/'+'AALI_contacts.csv'
         result_joined.to_csv(result_joined_path)
 
 if __name__ == '__main__':
