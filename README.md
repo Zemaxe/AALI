@@ -91,3 +91,7 @@ pip install biopython
 or
 
 conda install biopython
+
+## Feedback
+
+Feel free to ask for help, suggest features, or just send a feedback :)
