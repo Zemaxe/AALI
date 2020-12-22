@@ -5,10 +5,10 @@ Created on Mon Sep 28 09:38:30 2020
 @author: Muhamed Adilovic
 """
 
-from Bio.PDB.PDBParser import PDBParser
-import pandas as pd
-import argparse
 import os
+import argparse
+import pandas as pd
+from Bio.PDB.PDBParser import PDBParser
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -18,6 +18,8 @@ def parse_args():
                         help = "set the folder containing pdb files")
     parser.add_argument("-out", "--out_folder", default="output",
                         help = "set the folder which will contain the results")
+    parser.add_argument("-c", "--combined", choices=["yes", "no"], default="no",
+                        help = "choose whether to show all distances or smallest ones")    
     args = parser.parse_args()
     return args
 
@@ -28,9 +30,6 @@ threshold_w = int('4')
 mode = 'residue'
 # mode = 'CA'
 
-# combined = 'yes'
-combined = 'no'
-
 skip = 'yes'
 # skip = 'no'
 
@@ -39,9 +38,6 @@ check_water = 'yes'
 
 check_ligand = 'yes'
 # check_ligand = 'no'
-
-# in_folder = 'PDBs'
-# out_folder = 'output'
 
 join = 'no'
 # join = 'yes'
@@ -256,7 +252,7 @@ def check_all_H(structure):
     if args.output == 'exact':
         for i in range(len(heteros)):
             all_ligands[hetero_names[i]] = check_distance_protein(structure, heteros[i])
-        if combined == 'yes':
+        if args.combined == 'yes':
             all_ligands = all_ligands.min(axis=1)
             all_ligands.name = 'ligand_distance'
     # handling a case if output = 'tf'
@@ -265,7 +261,7 @@ def check_all_H(structure):
             column_id = hetero_names[i]+'_'+str(threshold)
             all_ligands[column_id] = check_distance_protein(structure, heteros[i])
         all_ligands = all_ligands < threshold
-        if combined == 'yes':
+        if args.combined == 'yes':
             all_ligands = all_ligands.any(axis=1)
             all_ligands.name = 'ligand_'+str(threshold)
     return all_ligands
