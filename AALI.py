@@ -383,15 +383,6 @@ if __name__ == '__main__':
 # check_water = check_all_W(structure)
 
 
-
-"""
-Checked against these two servers:
-    https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4909059/
-    https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3039989/
-    http://firedb.bioinfo.cnio.es/Php/Contact.php
-And currently, AALI gives the same results as these above...
-"""
-
 # output_test = open('output_test.txt', 'w')
                 
                 
