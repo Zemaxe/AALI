@@ -241,11 +241,6 @@ def check_all_H(structure):
     and ligand from the protein structure.
     """  
     heteros = get_heteros(structure)
-    # handling a case with no ligands present
-    if len(heteros) == 0:
-        print(ID, ': no ligands present.')
-        if skip == 'yes':
-            return
     hetero_names = get_hetero_names(structure)
     all_ligands = pd.DataFrame()
     # handling a case if output = 'exact'
@@ -278,11 +273,6 @@ def check_all_W(structure):
     and water molecules from the protein structure.
     """  
     water = get_water(structure)
-    # handling a case with no water present
-    if len(water) == 0:
-        print(ID, ': no water molecules present.')
-        if skip == 'yes':
-            return
     all_water = pd.DataFrame()
     # handling a case if output = 'exact'
     if output == 'exact':
@@ -299,7 +289,7 @@ def check_all_W(structure):
         all_water.name = 'water_'+str(threshold_w)
     return all_water
 
-def combine(structure):
+def combine(structure, ID):
     """
     Parameters
     ----------
@@ -312,10 +302,6 @@ def combine(structure):
     structure.
     """
     # TODO
-    # Add support for skip entire protein if both no ligand and no water molecules are present
-    # and skip == yes
-
-    # TODO
     # Add support to generate an empty column if no ligand/water is present
     # and skip == no
     
@@ -323,49 +309,64 @@ def combine(structure):
     result = pd.DataFrame()
     result['AA_name'] = AA_names
     result['AA_num'] = AA_nums
+    heteros = get_heteros(structure)
+    water = get_water(structure)
     # handle different types of checks...
     if check_ligand == 'yes' and check_water == 'yes':
+        if len(heteros) == 0 and len(water) == 0:
+            return
         H_distances = check_all_H(structure)
         W_distances = check_all_W(structure)
         return pd.concat([result,H_distances,W_distances], axis=1)
     elif check_ligand == 'yes':
+        if len(heteros) == 0:
+            return
         H_distances = check_all_H(structure)
         return pd.concat([result,H_distances], axis=1)
     elif check_water == 'yes':
+        if len(water) == 0:
+            return
         W_distances = check_all_W(structure)
         return pd.concat([result,W_distances], axis=1)
     else:
         print('Please use "yes" for at least one of the two: chek_water or check_ligand.')
         return
+
+def main():
+    if not os.path.exists(out_folder):
+        os.mkdir(out_folder)
     
-if not os.path.exists(out_folder):
-    os.mkdir(out_folder)
-
-proteins = []
-
-for file in os.listdir(in_folder):
-    if file.endswith('.pdb'):
-        proteins.append(file)
-
-if join == 'yes':
-    result_joined = pd.DataFrame()
-
-for protein in proteins:
-    ID = protein.replace('.pdb', '')
-    parser = PDBParser()
-    protein_path = in_folder+'/'+protein
-    structure = parser.get_structure(ID, protein_path)
+    proteins = []
     
-    result = combine(structure)
-    if join == 'no':
-        result_path = out_folder+'/'+ID+'.csv'
-        result.to_csv(result_path)
-    elif join == 'yes':
-        result_joined = pd.concat([result_joined,result])
+    for file in os.listdir(in_folder):
+        if file.endswith('.pdb'):
+            proteins.append(file)
+    
+    if join == 'yes':
+        result_joined = pd.DataFrame()
+    
+    for protein in proteins:
+        ID = protein.replace('.pdb', '')
+        parser = PDBParser()
+        protein_path = in_folder+'/'+protein
+        structure = parser.get_structure(ID, protein_path)
+        
+        result = combine(structure, ID)
+        if result is None:
+            print('No ligands and/or water present in ', ID)
+            continue
+        if join == 'no':
+            result_path = out_folder+'/'+ID+'.csv'
+            result.to_csv(result_path)
+        elif join == 'yes':
+            result_joined = pd.concat([result_joined,result])
+    
+    if join == 'yes':
+        result_joined_path = out_folder+'/'+'AALI_contacts.csv'
+        result_joined.to_csv(result_joined_path)
 
-if join == 'yes':
-    result_joined_path = out_folder+'/'+'AALI_contacts.csv'
-    result_joined.to_csv(result_joined_path)
+if __name__ == '__main__':
+    main()
 
 # # Some checks...
 # let_me_try = get_heteros(structure)
