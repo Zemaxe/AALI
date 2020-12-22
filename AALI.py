@@ -19,28 +19,25 @@ def parse_args():
     parser.add_argument("-out", "--out_folder", default="output",
                         help = "set the folder which will contain the results")
     parser.add_argument("-c", "--combined", choices=["yes", "no"], default="no",
-                        help = "choose whether to show all distances or the smallest ones")    
+                        help = "choose whether to show all distances or the smallest ones")
+    parser.add_argument("-m", "--mode", choices=["CA", "residue"], default="residue",
+                        help = "choose whether to check distance against CA or \
+                            all atoms in amino acid and pick the smallest one")
+    parser.add_argument("-chl", "--check_ligand", choices=["yes", "no"], default="yes",
+                        help = "choose whether to check amino acids against ligands")
+    parser.add_argument("-chw", "--check_water", choices=["yes", "no"], default="no",
+                        help = "choose whether to check amino acids against water")
+    parser.add_argument("-s", "--skip", choices=["yes", "no"], default="no",
+                        help = "choose whether to analyze the pdb file even if \
+                            it doesn't have water or ligands")
+    parser.add_argument("-j", "--join", choices=["yes", "no"], default="no",
+                        help = "choose whether to join all output csv files into one")
     args = parser.parse_args()
     return args
 
 threshold = int('4')
 
 threshold_w = int('4')
-
-mode = 'residue'
-# mode = 'CA'
-
-skip = 'yes'
-# skip = 'no'
-
-check_water = 'yes'
-# check_water = 'no'
-
-check_ligand = 'yes'
-# check_ligand = 'no'
-
-join = 'no'
-# join = 'yes'
 
 # TODO
 # Implement handling multiple chains
@@ -228,9 +225,9 @@ def check_distance_protein(structure, H):
             for residue in chain.get_list():
                 if is_nonAA(residue):
                     continue
-                if mode == 'residue':
+                if args.mode == 'residue':
                     distances.append(check_distance_residue(residue, H))
-                elif mode == 'CA':
+                elif args.mode == 'CA':
                     distances.append(check_distance_CA(residue, H))                
     return distances
 
@@ -305,6 +302,7 @@ def combine(structure):
     dataframe : containing every amino acid name and ID number, toegether with
     all distances between each amino acid residue and ligand from the protein 
     structure.
+    None : in cases where the protein is supposed to be skipped
     """
     # TODO
     # Add support to generate an empty column if no ligand/water is present
@@ -317,18 +315,18 @@ def combine(structure):
     heteros = get_heteros(structure)
     water = get_water(structure)
     # handle different types of checks...
-    if check_ligand == 'yes' and check_water == 'yes':
+    if args.check_ligand == 'yes' and args.check_water == 'yes':
         if len(heteros) == 0 and len(water) == 0:
             return
         H_distances = check_all_H(structure)
         W_distances = check_all_W(structure)
         return pd.concat([result,H_distances,W_distances], axis=1)
-    elif check_ligand == 'yes':
+    elif args.check_ligand == 'yes':
         if len(heteros) == 0:
             return
         H_distances = check_all_H(structure)
         return pd.concat([result,H_distances], axis=1)
-    elif check_water == 'yes':
+    elif args.check_water == 'yes':
         if len(water) == 0:
             return
         W_distances = check_all_W(structure)
@@ -347,7 +345,7 @@ def main(args):
         if file.endswith('.pdb'):
             proteins.append(file)
     
-    if join == 'yes':
+    if args.join == 'yes':
         result_joined = pd.DataFrame()
     
     for protein in proteins:
@@ -360,13 +358,13 @@ def main(args):
         if result is None:
             print('No ligands and/or water present in ', ID)
             continue
-        if join == 'no':
+        if args.join == 'no':
             result_path = args.out_folder+'/'+ID+'.csv'
             result.to_csv(result_path)
-        elif join == 'yes':
+        elif args.join == 'yes':
             result_joined = pd.concat([result_joined,result])
     
-    if join == 'yes':
+    if args.join == 'yes':
         result_joined_path = args.out_folder+'/'+'AALI_contacts.csv'
         result_joined.to_csv(result_joined_path)
 

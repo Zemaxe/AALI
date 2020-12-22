@@ -117,6 +117,9 @@ venv.bak/
 .spyderproject
 .spyproject
 
+# Spyder code analysis
+.pylint.d
+
 # Rope project settings
 .ropeproject
 
