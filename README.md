@@ -11,7 +11,7 @@ More specifically, it checks the distance between each amino acid in a protein m
 
 python AALI.py
 
-Put the script AALI.py into the folder together with the input directory "PDBs" containing pdb files.
+Put the script AALI.py into the folder together with the input directory "PDBs" containing pdb files. Run the script with python.
 
 The script will read PDB files from the input directory and save the results into the output directory (default "output").
 
@@ -65,7 +65,7 @@ join (default: no)
   - no (generate a csv output file for each pdb file)
   - yes (generate a single csv output file for all pdb files)
   
-##### Note: expect high RAM usage if working with a lot of pdb files and selecting join='yes' (probably 1GB+ for 5000 pdb files, depends on the files themselves).
+#### Note: expect high RAM usage if working with a lot of pdb files and selecting join='yes' (probably 1GB+ for 5000 pdb files, depends on the files themselves).
 
   
 
