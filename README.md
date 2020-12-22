@@ -7,11 +7,17 @@ Note: still in development but the script is usable at this point...
 Python script for checking the interactions between amino acids and ligands (or amino acids and water molecules).
 More specifically, it checks the distance between each amino acid in a protein model and each ligand (or each water molecule).
 
-Planned usage:
+## Usage:
 
-The script will read PDB files from the input directory (default "PDBs"), and save the results into the output directory (default "output").
+python AALI.py
 
-Planned Functionality:
+Put the script AALI.py into the folder together with the input directory "PDBs" containing pdb files.
+
+The script will read PDB files from the input directory and save the results into the output directory (default "output").
+
+For addtional options, see argument list and explanations below.
+
+## Functionality:
 
 Outputs a csv file (one or multiple) with all amino acids and additional information on their distances from (or interactions with) ligand(s) and/or water molecules.
 
@@ -23,7 +29,7 @@ Different versions of output:
 - in case of multiple pdb files, it can output one csv file per pdb file, or it can combine the all of the output into a single pdb file
 
 
-Planned Options / Parameters:
+## Options / Parameters:
 
 output (default: exact)
   - exact (reports an exact distance)
@@ -59,11 +65,11 @@ join (default: no)
   - no (generate a csv output file for each pdb file)
   - yes (generate a single csv output file for all pdb files)
   
-Note: expect high RAM usage if working with a lot of pdb files and selecting join='yes' (probably 1GB+ for 5000 pdb files, depends on the files themselves).
+### Note: expect high RAM usage if working with a lot of pdb files and selecting join='yes' (probably 1GB+ for 5000 pdb files, depends on the files themselves).
 
   
 
-General notes:
+## General notes:
 
 General computation time (TBD)
 Testing on multiple pdb files (TBD)
