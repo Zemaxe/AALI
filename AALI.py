@@ -7,7 +7,15 @@ Created on Mon Sep 28 09:38:30 2020
 
 from Bio.PDB.PDBParser import PDBParser
 import pandas as pd
+import argparse
 import os
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-o", "--output", choices=["exact", "tf"], 
+                        help="set output type: exact distance or true/false")
+    args = parser.parse_args()
+    return args
 
 threshold = int('4')
 
@@ -16,7 +24,7 @@ threshold_w = int('4')
 mode = 'residue'
 # mode = 'CA'
 
-output = 'exact'
+# output = 'exact'
 # output = 'tf'
 
 # combined = 'yes'
@@ -244,14 +252,14 @@ def check_all_H(structure):
     hetero_names = get_hetero_names(structure)
     all_ligands = pd.DataFrame()
     # handling a case if output = 'exact'
-    if output == 'exact':
+    if args.output == 'exact':
         for i in range(len(heteros)):
             all_ligands[hetero_names[i]] = check_distance_protein(structure, heteros[i])
         if combined == 'yes':
             all_ligands = all_ligands.min(axis=1)
             all_ligands.name = 'ligand_distance'
     # handling a case if output = 'tf'
-    elif output == 'tf':
+    elif args.output == 'tf':
         for i in range(len(heteros)):
             column_id = hetero_names[i]+'_'+str(threshold)
             all_ligands[column_id] = check_distance_protein(structure, heteros[i])
@@ -275,13 +283,13 @@ def check_all_W(structure):
     water = get_water(structure)
     all_water = pd.DataFrame()
     # handling a case if output = 'exact'
-    if output == 'exact':
+    if args.output == 'exact':
         for i in range(len(water)):
             all_water[str(i)] = check_distance_protein(structure, water[i])
         all_water = all_water.min(axis=1)
         all_water.name = 'water_distance'
     # handling a case if output = 'tf'
-    elif output == 'tf':
+    elif args.output == 'tf':
         for i in range(len(water)):
             all_water[str(i)] = check_distance_protein(structure, water[i])
         all_water = all_water < threshold_w
@@ -332,7 +340,7 @@ def combine(structure):
         print('Please use "yes" for at least one of the two: chek_water or check_ligand.')
         return
 
-def main():
+def main(args):
     if not os.path.exists(out_folder):
         os.mkdir(out_folder)
     
@@ -366,7 +374,8 @@ def main():
         result_joined.to_csv(result_joined_path)
 
 if __name__ == '__main__':
-    main()
+    args = parse_args()
+    main(args)
 
 # # Some checks...
 # let_me_try = get_heteros(structure)
