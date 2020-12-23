@@ -316,18 +316,18 @@ def combine(structure):
     water = get_water(structure)
     # handle different types of checks...
     if args.check_ligand == 'yes' and args.check_water == 'yes':
-        if len(heteros) == 0 and len(water) == 0:
+        if args.skip == 'yes' and len(heteros) == 0 and len(water) == 0:
             return
         H_distances = check_all_H(structure)
         W_distances = check_all_W(structure)
         return pd.concat([result,H_distances,W_distances], axis=1)
     elif args.check_ligand == 'yes':
-        if len(heteros) == 0:
+        if args.skip == 'yes' and len(heteros) == 0:
             return
         H_distances = check_all_H(structure)
         return pd.concat([result,H_distances], axis=1)
     elif args.check_water == 'yes':
-        if len(water) == 0:
+        if args.skip == 'yes' and len(water) == 0:
             return
         W_distances = check_all_W(structure)
         return pd.concat([result,W_distances], axis=1)
