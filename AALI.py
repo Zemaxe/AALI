@@ -119,6 +119,8 @@ def get_AA_names_nums(structure):
     """
     AA_names = []
     AA_nums = []
+    AA_model = []
+    AA_chain = []
     for model in structure:
         for chain in model:
             for residue in chain.get_list():
@@ -126,7 +128,9 @@ def get_AA_names_nums(structure):
                     continue
                 AA_names.append(residue.get_resname())
                 AA_nums.append(residue.get_id()[1])
-    return AA_names, AA_nums
+                AA_model.append(model._id)
+                AA_chain.append(chain._id)               
+    return AA_names, AA_nums, AA_model, AA_chain
                 
 def is_nonAA(residue):
     """
@@ -308,10 +312,12 @@ def combine(structure):
     # Add support to generate an empty column if no ligand/water is present
     # and skip == no
     
-    AA_names, AA_nums = get_AA_names_nums(structure)
+    AA_names, AA_nums, AA_model, AA_chain = get_AA_names_nums(structure)
     result = pd.DataFrame()
     result['AA_name'] = AA_names
     result['AA_num'] = AA_nums
+    result['model'] = AA_model
+    result['chain'] = AA_chain
     heteros = get_heteros(structure)
     water = get_water(structure)
     # handle different types of checks...
