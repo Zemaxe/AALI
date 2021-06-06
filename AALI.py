@@ -40,10 +40,6 @@ def parse_args():
 threshold_w = int('4')
 
 # TODO
-# Implement handling multiple chains
-# E.g. if multiple chains add chain column in the output
-
-# TODO
 # Implement support for verbose
 # Printing out the percentage of work done
 
