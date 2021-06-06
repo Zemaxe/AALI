@@ -70,7 +70,9 @@ join (default: no)
 ## General notes:
 
 General computation time is ~5 seconds per protein, although it can be significantly different, depending on the size of the protein and number of ligands, or if it has multiple models inside.
+
 Computation time also depends on the parameters; e.g. mode:CA is faster then mode:all, although it is less precise, since it doesn't take sidechains into consideration.
+
 Additionally, if calculating the distance from water molecules, the number of water molecules present can signifficantly affect the computation time.
 
 ## Requirements:
