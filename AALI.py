@@ -372,18 +372,6 @@ if __name__ == '__main__':
     args = parse_args()
     main(args)
 
-# # Some checks...
-# let_me_try = get_heteros(structure)
-# AA_names, AA_nums = get_AA_names_nums(structure)
-# hetero_names = get_hetero_names(structure)
-# heteros = get_heteros(structure)
-# water = get_water(structure)
-# H_distances = check_all_H(structure)
-# check_all = combine(structure)
-# check_water = check_all_W(structure)
-
-
-# output_test = open('output_test.txt', 'w')
                 
                 
                 
