@@ -122,14 +122,16 @@ def get_AA_names_nums(structure):
     AA_model = []
     AA_chain = []
     for model in structure:
+        model_id = model._id
         for chain in model:
+            chain_id = chain._id
             for residue in chain.get_list():
                 if is_nonAA(residue):
                     continue
                 AA_names.append(residue.get_resname())
                 AA_nums.append(residue.get_id()[1])
-                AA_model.append(model._id)
-                AA_chain.append(chain._id)               
+                AA_model.append(model_id)
+                AA_chain.append(chain_id)                
     return AA_names, AA_nums, AA_model, AA_chain
                 
 def is_nonAA(residue):
