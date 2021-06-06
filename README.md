@@ -2,8 +2,6 @@
 
 Amino Acid Ligand Interactions
 
-Note: still in development but the script is usable at this point...
-
 Python script for checking the interactions between amino acids and ligands (and/or amino acids and water molecules).
 More specifically, it checks the distance between each amino acid in a protein model and each ligand (and/or each water molecule).
 
@@ -39,10 +37,10 @@ combined (default: no)
   - yes (reports the smallest distance from all ligands in a single column, or, if output=tf, a single True if any of the ligands is within the threshold distance, False otherwise)
   - no (reports info on all ligands)
   
-threshold (default: [3.5,7]) """"""""""""""""""""""TBD""""""""""""""""""""""
+threshold (default: [3.5,7])
   - a (list of) number(s) (applicable in the case of output = tf - what will be a threshold value for which True will be generated, indicating a contact between amino acid and a ligand)
   
-threshold_w (default: [3.5]
+threshold_w (default: [3.5])
   - a (list of) number(s) (applicable in the case of output = tf - what will be a threshold value for which True will be generated, indicating a contact between amino acid and a water molecule)
   
 mode (default: residue)
@@ -65,18 +63,15 @@ join (default: no)
   - no (generate a csv output file for each pdb file)
   - yes (generate a single csv output file for all pdb files)
   
-#### Note: expect high RAM usage if working with a lot of pdb files and selecting join='yes' (probably 1GB+ for 5000 pdb files, depends on the files themselves).
+#### Note: expect high RAM usage if working with a lot of pdb files and selecting join='yes' (probably 1GB+ for ~5000 pdb files, depends on the files themselves).
 
   
 
 ## General notes:
 
-General computation time (TBD)
-Testing on multiple pdb files (TBD)
-
-Computation time CA vs all, vs with water
-
-Water yes - only condensed mode since some protein models have a lot of water molecules
+General computation time is ~5 seconds per protein, although it can be significantly different, depending on the size of the protein and number of ligands, or if it has multiple models inside.
+Computation time also depends on the parameters; e.g. mode:CA is faster then mode:all, although it is less precise, since it doesn't take sidechains into consideration.
+Additionally, if calculating the distance from water molecules, the number of water molecules present can signifficantly affect the computation time.
 
 ## Requirements:
 
